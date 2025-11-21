@@ -2,6 +2,9 @@
 
 A fully-featured offline-first Progressive Web App (PWA) built with React, IndexedDB, and Workbox. Track your daily habits, maintain streaks, and stay motivated with reminders and detailed analytics.
 
+## Checkout the deployed version
+- [Habit-Tracker](https://habit-tracker-silk-phi.vercel.app/)
+
 ## Features
 
 ### Core Habits Management

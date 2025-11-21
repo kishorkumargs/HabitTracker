@@ -1,4 +1,5 @@
 import { FlameIcon } from 'lucide-react';
+import CountUp from './CountUp'
 
 function StreakStat({ label, value }) {
   return (
@@ -21,9 +22,15 @@ export default function StreakDisplay({ streak, accentColor }) {
         <FlameIcon className='w-5 h-5 border-2 border-none' style={{ color: accentColor || '#f59e0b' }} />
       </span>
       <div className="flex gap-6 divide-x" style={{ borderColor: accentColor ? `${accentColor}40` : '#fbbf24' }}>
-        <StreakStat label="Current" value={`${current} day${current === 1 ? '' : 's'}`} />
+        <StreakStat
+          label="Current"
+          value={<CountUp end={current} duration={900} className="mt-1 text-sm sm:text-base font-bold text-gray-900 dark:text-slate-100" suffix={` day${current === 1 ? '' : 's'}`} />}
+        />
         <div className="pl-6">
-          <StreakStat label="Longest" value={`${longest} day${longest === 1 ? '' : 's'}`} />
+          <StreakStat
+            label="Longest"
+            value={<CountUp end={longest} duration={900} className="mt-1 text-sm sm:text-base font-bold text-gray-900 dark:text-slate-100" suffix={` day${longest === 1 ? '' : 's'}`} />}
+          />
         </div>
       </div>
     </div>

@@ -19,16 +19,19 @@ const MonthCalendar = memo(function MonthCalendar({ year, month, checkinMap, acc
     <div className="space-y-1">
       {/* Month name */}
       <div className="text-center mb-2">
-        <h4 className="text-sm font-semibold text-gray-700 dark:text-slate-300">
+        <h4 className="text-sm sm:text-sm font-semibold text-gray-700 dark:text-slate-300">
           {format(monthDate, 'MMM')}
         </h4>
-        <p className="text-xs text-gray-500 dark:text-slate-400">{year}</p>
+        <p className="text-xs sm:text-xs text-gray-500 dark:text-slate-400">{year}</p>
       </div>
       
       {/* Weekday headers */}
       <div className="grid grid-cols-7 gap-1 mb-1">
         {weekDayLabels.map((day, idx) => (
-          <div key={idx} className="text-center text-xs font-semibold text-gray-500 dark:text-slate-400 h-6 flex items-center justify-center">
+          <div
+            key={idx}
+            className="text-center text-[10px] sm:text-xs font-semibold text-gray-500 dark:text-slate-400 h-5 sm:h-6 flex items-center justify-center"
+          >
             {day}
           </div>
         ))}
@@ -37,7 +40,7 @@ const MonthCalendar = memo(function MonthCalendar({ year, month, checkinMap, acc
       {/* Calendar grid */}
       <div className="grid grid-cols-7 gap-1">
         {emptyCells.map((_, idx) => (
-          <div key={`empty-${idx}`} className="h-6"></div>
+          <div key={`empty-${idx}`} className="h-5 sm:h-6"></div>
         ))}
         {allDays.map((day) => {
           const dateKey = format(day, 'yyyy-MM-dd')
@@ -48,7 +51,7 @@ const MonthCalendar = memo(function MonthCalendar({ year, month, checkinMap, acc
             <div
               key={dateKey}
               title={format(day, 'EEEE, MMM d, yyyy')}
-              className={`h-6 flex items-center justify-center text-xs rounded transition-all cursor-pointer hover:scale-110 hover:shadow-md ${
+              className={`h-5 sm:h-6 flex items-center justify-center text-[10px] sm:text-xs rounded transition-all cursor-pointer sm:hover:scale-110 sm:hover:shadow-md ${
                 isToday ? 'ring-2 ring-blue-500' : ''
               }`}
               style={{
@@ -225,7 +228,8 @@ export default function YearlyOverview({ habits, year: propYear, setYear: propSe
                 </div>
                 
                 {/* 12-month grid */}
-                <div className="grid grid-cols-4 gap-4">
+                <div className="overflow-x-auto -mx-2 px-2">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                   {Array.from({ length: 12 }, (_, monthIndex) => (
                     <MonthCalendar
                       key={monthIndex}
@@ -235,6 +239,7 @@ export default function YearlyOverview({ habits, year: propYear, setYear: propSe
                       accentColor={habit.color}
                     />
                   ))}
+                  </div>
                 </div>
               </div>
             )

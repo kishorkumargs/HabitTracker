@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Plus } from 'lucide-react'
+import { Plus, ArrowLeft } from 'lucide-react'
 import HabitCard from './components/HabitCard.jsx'
 import HabitFormModal from './components/HabitFormModal.jsx'
 import AnalyticsDashboard from './components/AnalyticsDashboard.jsx'
@@ -119,9 +119,10 @@ export default function App() {
       {/* Homepage Button - Fixed Top Left */}
       <button
         onClick={() => setShowHome(true)}
-        className="fixed top-2 sm:top-4 left-2 sm:left-4 z-40 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all whitespace-nowrap"
+        className="fixed inline-flex items-center top-2 sm:top-4 left-2 sm:left-4 z-40 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all whitespace-nowrap"
       >
-        ← Back
+        <ArrowLeft className="w-4 h-4 mr-1" />
+        Back
       </button>
 
       <main className="mx-auto flex max-w-6xl flex-col gap-6 sm:gap-8">

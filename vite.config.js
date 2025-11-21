@@ -49,7 +49,9 @@ export default defineConfig({
       },
       workbox: {
         globDirectory: 'dist',
-        globPattern: '**/*.{js,wasm,css,html}',
+        // 'globPatterns' is the correct option name expected by workbox-build
+        // previous key `globPattern` caused validation errors during build.
+        globPatterns: ['**/*.{js,wasm,css,html}'],
         globIgnores: [
           '**/node_modules/**/*',
           'sw.js',

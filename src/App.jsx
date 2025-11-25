@@ -13,6 +13,7 @@ import useHabits from './hooks/useHabits.js'
 import useStreaks from './hooks/useStreaks.js'
 import ClickSpark from './components/ClickSpark.jsx'
 import DotGrid from './components/DotGrid.jsx'
+import SpotlightCard from './components/SpotLightCard.jsx'
 import { useTheme } from './contexts/useTheme.js'
 
 function StatCard({ label, value, accent }) {
@@ -145,144 +146,150 @@ export default function App() {
           duration={400}
         >
           <div className="px-4 py-10">
-        {/* Homepage Button - Fixed Top Left */}
-        <button
-          onClick={() => setShowHome(true)}
-          className="fixed inline-flex items-center top-2 sm:top-4 left-2 sm:left-4 z-40 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all whitespace-nowrap"
-        >
-          <ArrowLeft className="w-4 h-4 mr-1" />
-          Back
-        </button>
+          {/* Homepage Button - Fixed Top Left */}
+          <button
+            onClick={() => setShowHome(true)}
+            className="fixed inline-flex items-center top-2 sm:top-4 left-2 sm:left-4 z-40 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-lg hover:shadow-xl transition-all whitespace-nowrap"
+          >
+            <ArrowLeft className="w-4 h-4 mr-1" />
+            Back
+          </button>
 
-        <main className="mx-auto flex max-w-6xl flex-col gap-6 sm:gap-8">
-          <header className="space-y-2 sm:space-y-3">
-            <div className="flex items-center justify-between gap-2 sm:gap-4">
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-50 truncate">
-                Habit Tracker
-              </h1>
-              <ThemeToggle />
-            </div>
-            <p className="text-sm text-gray-600 dark:text-slate-400">
-              Track daily habits, see your streaks, and stay motivated with reminders.
-            </p>
-            <OfflineStatus />
-            {feedback ? <p className="text-xs text-blue-500">{feedback}</p> : null}
-            {error ? <p className="text-xs text-red-500">{error.message}</p> : null}
-          </header>
-
-          <section className="grid gap-4 grid-cols-2 lg:grid-cols-3">
-            <StatCard label="Total habits" value={streakStats.totalHabits} />
-            <StatCard
-              label="Active streaks"
-              value={streakStats.activeHabits}
-              accent={
-                activeHabits.length
-                ? `Currently active: ${activeHabits.map((habit) => habit.name).join(', ')}`
-                : 'No active streaks yet.'
-              }
-              />
-            <StatCard
-              label="Longest streak"
-              value={`${streakStats.longestStreak} day${streakStats.longestStreak === 1 ? '' : 's'}`}
-              />
-          </section>
-
-          <section className="grid gap-6">
-            {/* Top Streaks Card */}
-            <div className="rounded-xl border border-gray-200 bg-orange-50/20 p-6 shadow-sm transition-all duration-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-              <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
-                Top streaks
-              </h2>
-              {streakStats.topHabits.length === 0 ? (
-                <p className="text-sm text-gray-500 dark:text-slate-400 mt-2">
-                  Keep checking in every day to build streaks.
-                </p>
-              ) : (
-                <ul className="mt-3 space-y-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {streakStats.topHabits.map((item) => (
-                    <li
-                    key={item.id}
-                    className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm dark:bg-slate-800/70 transition-colors hover:bg-gray-100 dark:hover:bg-slate-700/70"
-                    >
-                      <span className="font-medium">{item.name}</span>
-                      <span className="text-gray-500 dark:text-slate-300">
-                        {item.current} day{item.current === 1 ? '' : 's'}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
-            {/* Today's Habits Section */}
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
-                  Today&apos;s habits
-                </h2>
-                <button
-                  onClick={() => setShowAddModal(true)}
-                  className="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex items-center gap-2"
-                >
-                  <Plus className="w-5 h-5" />
-                  Add Habit
-                </button>
+          <main className="mx-auto flex max-w-6xl flex-col gap-6 sm:gap-8">
+            <header className="space-y-2 sm:space-y-3">
+              <div className="flex items-center justify-between gap-2 sm:gap-4">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-slate-50 truncate">
+                  Habit Tracker
+                </h1>
+                <ThemeToggle />
               </div>
-              {loading ? (
-                <p className="text-sm text-gray-500">Loading habits…</p>
-              ) : habits.length === 0 ? (
-                <p className="text-sm text-gray-500">
-                  No habits yet. Add your first habit to get started!
-                </p>
-              ) : (
-                <div className="space-y-4">
-                  {habits.map((habit) => (
-                    <HabitCard
-                    key={habit.id}
-                    habit={habit}
-                    onCheckIn={handleCheckIn}
-                    onEdit={setEditingHabit}
-                    onDelete={(id) => handleDeleteHabit(id, habit.name)}
-                    loadSummary={(id) => getSummary(id, 14)}
-                    onReminderChange={handleReminderChange}
-                    onMockReminder={() => setFeedback('Mock reminder sent.')}
-                    onViewAnalytics={setSelectedHabitForAnalytics}
-                    />
-                  ))}
+              <p className="text-sm text-gray-600 dark:text-slate-400">
+                Track daily habits, see your streaks, and stay motivated with reminders.
+              </p>
+              <OfflineStatus />
+              {feedback ? <p className="text-xs text-blue-500">{feedback}</p> : null}
+              {error ? <p className="text-xs text-red-500">{error.message}</p> : null}
+            </header>
+
+            <section className="grid gap-4 grid-cols-2 lg:grid-cols-3">
+              <SpotlightCard className="!p-4 !rounded-xl !bg-gray-50 dark:!bg-slate-900 !border-gray-100 dark:!border-slate-800" spotlightColor={theme === 'dark' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.1)'}>
+                <StatCard label="Total habits" value={streakStats.totalHabits} />
+              </SpotlightCard>
+              <SpotlightCard className="!p-4 !rounded-xl !bg-gray-50 dark:!bg-slate-900 !border-gray-100 dark:!border-slate-800" spotlightColor={theme === 'dark' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.1)'}>
+                <StatCard
+                  label="Active streaks"
+                  value={streakStats.activeHabits}
+                  accent={
+                    activeHabits.length
+                    ? `Currently active: ${activeHabits.map((habit) => habit.name).join(', ')}`
+                    : 'No active streaks yet.'
+                  }
+                  />
+              </SpotlightCard>
+              <SpotlightCard className="!p-4 !rounded-xl !bg-gray-50 dark:!bg-slate-900 !border-gray-100 dark:!border-slate-800" spotlightColor={theme === 'dark' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.1)'}>
+                <StatCard
+                  label="Longest streak"
+                  value={`${streakStats.longestStreak} day${streakStats.longestStreak === 1 ? '' : 's'}`}
+                  />
+              </SpotlightCard>
+            </section>
+
+            <section className="grid gap-6">
+              {/* Top Streaks Card */}
+              <div className="rounded-xl border border-gray-200 bg-orange-50/20 p-6 shadow-sm transition-all duration-300 hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
+                <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
+                  Top streaks
+                </h2>
+                {streakStats.topHabits.length === 0 ? (
+                  <p className="text-sm text-gray-500 dark:text-slate-400 mt-2">
+                    Keep checking in every day to build streaks.
+                  </p>
+                ) : (
+                  <ul className="mt-3 space-y-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {streakStats.topHabits.map((item) => (
+                      <li
+                      key={item.id}
+                      className="flex items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm dark:bg-slate-800/70 transition-colors hover:bg-gray-100 dark:hover:bg-slate-700/70"
+                      >
+                        <span className="font-medium">{item.name}</span>
+                        <span className="text-gray-500 dark:text-slate-300">
+                          {item.current} day{item.current === 1 ? '' : 's'}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              {/* Today's Habits Section */}
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-gray-800 dark:text-slate-100">
+                    Today&apos;s habits
+                  </h2>
+                  <button
+                    onClick={() => setShowAddModal(true)}
+                    className="px-4 py-2 text-sm font-semibold bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white rounded-lg shadow-md hover:shadow-lg transition-all flex items-center gap-2"
+                  >
+                    <Plus className="w-5 h-5" />
+                    Add Habit
+                  </button>
                 </div>
-              )}
+                {loading ? (
+                  <p className="text-sm text-gray-500">Loading habits…</p>
+                ) : habits.length === 0 ? (
+                  <p className="text-sm text-gray-500">
+                    No habits yet. Add your first habit to get started!
+                  </p>
+                ) : (
+                  <div className="space-y-4">
+                    {habits.map((habit) => (
+                      <HabitCard
+                      key={habit.id}
+                      habit={habit}
+                      onCheckIn={handleCheckIn}
+                      onEdit={setEditingHabit}
+                      onDelete={(id) => handleDeleteHabit(id, habit.name)}
+                      loadSummary={(id) => getSummary(id, 14)}
+                      onReminderChange={handleReminderChange}
+                      onMockReminder={() => setFeedback('Mock reminder sent.')}
+                      onViewAnalytics={setSelectedHabitForAnalytics}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            </section>
+
+            <section className="space-y-4">
+              <AnalyticsDashboard habits={habits} />
+            </section>
+
+            <HabitFormModal
+              isOpen={showAddModal}
+              onClose={() => setShowAddModal(false)}
+              onSubmit={handleAddHabit}
+              title="Add a new habit"
+              submitLabel="Add habit"
+            />
+
+            <HabitFormModal
+              isOpen={!!editingHabit && !!editingHabit.id}
+              onClose={() => setEditingHabit(null)}
+              onSubmit={handleUpdateHabit}
+              initialHabit={editingHabit}
+              title="Edit habit"
+              submitLabel="Update habit"
+              />
+
+            <DeleteConfirmModal 
+              isOpen={deleteModal.isOpen}
+              onClose={() => setDeleteModal({ isOpen: false, habitId: null, habitName: '' })}
+              onConfirm={confirmDelete}
+              habitName={deleteModal.habitName}
+              />
+          </main>
             </div>
-          </section>
-
-          <section className="space-y-4">
-            <AnalyticsDashboard habits={habits} />
-          </section>
-
-          <HabitFormModal
-            isOpen={showAddModal}
-            onClose={() => setShowAddModal(false)}
-            onSubmit={handleAddHabit}
-            title="Add a new habit"
-            submitLabel="Add habit"
-          />
-
-          <HabitFormModal
-            isOpen={!!editingHabit && !!editingHabit.id}
-            onClose={() => setEditingHabit(null)}
-            onSubmit={handleUpdateHabit}
-            initialHabit={editingHabit}
-            title="Edit habit"
-            submitLabel="Update habit"
-            />
-
-          <DeleteConfirmModal 
-            isOpen={deleteModal.isOpen}
-            onClose={() => setDeleteModal({ isOpen: false, habitId: null, habitName: '' })}
-            onConfirm={confirmDelete}
-            habitName={deleteModal.habitName}
-            />
-        </main>
-          </div>
         </ClickSpark>
       </div>
     </div>

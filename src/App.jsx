@@ -13,7 +13,6 @@ import useHabits from './hooks/useHabits.js'
 import useStreaks from './hooks/useStreaks.js'
 import ClickSpark from './components/ClickSpark.jsx'
 import DotGrid from './components/DotGrid.jsx'
-import SpotlightCard from './components/SpotLightCard.jsx'
 import { useTheme } from './contexts/useTheme.js'
 
 function StatCard({ label, value, accent }) {
@@ -172,26 +171,20 @@ export default function App() {
             </header>
 
             <section className="grid gap-4 grid-cols-2 lg:grid-cols-3">
-              <SpotlightCard className="!p-4 !rounded-xl !bg-gray-50 dark:!bg-slate-900 !border-gray-100 dark:!border-slate-800" spotlightColor={theme === 'dark' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.1)'}>
-                <StatCard label="Total habits" value={streakStats.totalHabits} />
-              </SpotlightCard>
-              <SpotlightCard className="!p-4 !rounded-xl !bg-gray-50 dark:!bg-slate-900 !border-gray-100 dark:!border-slate-800" spotlightColor={theme === 'dark' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.1)'}>
-                <StatCard
-                  label="Active streaks"
-                  value={streakStats.activeHabits}
-                  accent={
-                    activeHabits.length
+              <StatCard label="Total habits" value={streakStats.totalHabits} />
+              <StatCard
+                label="Active streaks"
+                value={streakStats.activeHabits}
+                accent={
+                  activeHabits.length
                     ? `Currently active: ${activeHabits.map((habit) => habit.name).join(', ')}`
                     : 'No active streaks yet.'
-                  }
-                  />
-              </SpotlightCard>
-              <SpotlightCard className="!p-4 !rounded-xl !bg-gray-50 dark:!bg-slate-900 !border-gray-100 dark:!border-slate-800" spotlightColor={theme === 'dark' ? 'rgba(59, 130, 246, 0.15)' : 'rgba(59, 130, 246, 0.1)'}>
-                <StatCard
-                  label="Longest streak"
-                  value={`${streakStats.longestStreak} day${streakStats.longestStreak === 1 ? '' : 's'}`}
-                  />
-              </SpotlightCard>
+                }
+              />
+              <StatCard
+                label="Longest streak"
+                value={`${streakStats.longestStreak} day${streakStats.longestStreak === 1 ? '' : 's'}`}
+              />
             </section>
 
             <section className="grid gap-6">
